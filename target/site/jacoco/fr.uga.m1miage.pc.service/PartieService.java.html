@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PartieService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">prisonners_dilemma_1_4</a> &gt; <a href="index.source.html" class="el_package">fr.uga.m1miage.pc.service</a> &gt; <span class="el_source">PartieService.java</span></div><h1>PartieService.java</h1><pre class="source lang-java linenums">package fr.uga.m1miage.pc.service;
+
+import fr.uga.m1miage.pc.model.Joueur;
+import fr.uga.m1miage.pc.model.Partie;
+import fr.uga.m1miage.pc.strategies.*;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Service pour gérer les parties entre deux joueurs.
+ */
+public class PartieService {
+
+    private final Map&lt;String, Strategie&gt; strategies;
+
+    /**
+     * Initialise les stratégies disponibles.
+     */
+<span class="nc" id="L20">    public PartieService() {</span>
+<span class="nc" id="L21">        strategies = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L22">        strategies.put(&quot;DonnantDonnant&quot;, new StrategieDonnantDonnant());</span>
+        /*strategies.put(&quot;ToujoursCooperer&quot;, new StrategieToujoursCooperer());
+        strategies.put(&quot;ToujoursTricher&quot;, new StrategieToujoursTricher());
+        strategies.put(&quot;Graduel&quot;, new StrategieGraduel());
+        strategies.put(&quot;Aleatoire&quot;, new StrategieAleatoire());
+        strategies.put(&quot;Rancunier&quot;, new StrategieRancunier());
+        strategies.put(&quot;Pavlov&quot;, new StrategiePavlov());
+        strategies.put(&quot;Adaptative&quot;, new StrategieAdaptative());*/
+<span class="nc" id="L30">    }</span>
+
+    /**
+     * Crée une nouvelle partie avec les deux joueurs.
+     *
+     * @param joueur1       Le premier joueur.
+     * @param joueur2       Le second joueur.
+     * @param toursRestants Le nombre de tours de la partie.
+     * @return Une partie initialisée.
+     */
+    public Partie creerPartie(Joueur joueur1, Joueur joueur2, int toursRestants) {
+<span class="nc bnc" id="L41" title="All 2 branches missed.">        if (toursRestants &lt; 0) {</span>
+<span class="nc" id="L42">            throw new IllegalArgumentException(&quot;Le nombre de tours ne peut pas être négatif.&quot;);</span>
+        }
+<span class="nc" id="L44">        return new Partie(joueur1, joueur2, toursRestants);</span>
+    }
+
+    /**
+     * Joue un tour entre les deux joueurs de la partie.
+     *
+     * @param partie La partie en cours.
+     */
+    public void jouerTour(Partie partie) {
+<span class="nc bnc" id="L53" title="All 2 branches missed.">        if (partie.getToursRestants() &lt;= 0) {</span>
+<span class="nc" id="L54">            throw new IllegalStateException(&quot;La partie est terminée.&quot;);</span>
+        }
+
+<span class="nc" id="L57">        Joueur joueur1 = partie.getJoueur1();</span>
+<span class="nc" id="L58">        Joueur joueur2 = partie.getJoueur2();</span>
+
+<span class="nc" id="L60">        Strategie strategie1 = strategies.get(joueur1.getStrategie());</span>
+<span class="nc" id="L61">        Strategie strategie2 = strategies.get(joueur2.getStrategie());</span>
+
+<span class="nc bnc" id="L63" title="All 4 branches missed.">        if (strategie1 == null || strategie2 == null) {</span>
+<span class="nc" id="L64">            throw new NullPointerException(&quot;Une ou plusieurs stratégies sont invalides.&quot;);</span>
+        }
+
+        // Calcul des coups des joueurs
+<span class="nc" id="L68">        char choix1 = strategie1.decider(joueur2.getDernierCoup());</span>
+<span class="nc" id="L69">        char choix2 = strategie2.decider(joueur1.getDernierCoup());</span>
+
+        // Mise à jour des scores
+<span class="nc" id="L72">        calculerScores(joueur1, choix1, joueur2, choix2);</span>
+
+        // Réduction du nombre de tours restants
+<span class="nc" id="L75">        partie.setToursRestants(partie.getToursRestants() - 1);</span>
+<span class="nc" id="L76">    }</span>
+
+    /**
+     * Calcule les scores pour un tour en fonction des choix des joueurs.
+     *
+     * @param joueur1 Le premier joueur.
+     * @param choix1  Le choix du premier joueur ('c' ou 't').
+     * @param joueur2 Le second joueur.
+     * @param choix2  Le choix du second joueur ('c' ou 't').
+     */
+    private void calculerScores(Joueur joueur1, char choix1, Joueur joueur2, char choix2) {
+<span class="nc" id="L87">        final int T = 5; // Trahir contre un coopérant</span>
+<span class="nc" id="L88">        final int C = 3; // Coopération mutuelle</span>
+<span class="nc" id="L89">        final int P = 1; // Trahison mutuelle</span>
+<span class="nc" id="L90">        final int D = 0; // Coopérer contre un traître</span>
+
+<span class="nc bnc" id="L92" title="All 4 branches missed.">        if (choix1 == 't' &amp;&amp; choix2 == 't') {</span>
+<span class="nc" id="L93">            joueur1.setScore(joueur1.getScore() + P);</span>
+<span class="nc" id="L94">            joueur2.setScore(joueur2.getScore() + P);</span>
+<span class="nc bnc" id="L95" title="All 4 branches missed.">        } else if (choix1 == 'c' &amp;&amp; choix2 == 'c') {</span>
+<span class="nc" id="L96">            joueur1.setScore(joueur1.getScore() + C);</span>
+<span class="nc" id="L97">            joueur2.setScore(joueur2.getScore() + C);</span>
+<span class="nc bnc" id="L98" title="All 4 branches missed.">        } else if (choix1 == 't' &amp;&amp; choix2 == 'c') {</span>
+<span class="nc" id="L99">            joueur1.setScore(joueur1.getScore() + T);</span>
+<span class="nc" id="L100">            joueur2.setScore(joueur2.getScore() + D);</span>
+        } else {
+<span class="nc" id="L102">            joueur1.setScore(joueur1.getScore() + D);</span>
+<span class="nc" id="L103">            joueur2.setScore(joueur2.getScore() + T);</span>
+        }
+
+        // Mise à jour des derniers coups
+<span class="nc" id="L107">        joueur1.setDernierCoup(choix1);</span>
+<span class="nc" id="L108">        joueur2.setDernierCoup(choix2);</span>
+<span class="nc" id="L109">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

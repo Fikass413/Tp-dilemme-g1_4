@@ -1,0 +1,15 @@
+fr\uga\m1miage\pc\strategies\StrategiePavlovTest.class
+fr\uga\m1miage\pc\strategies\StrategieDonnantPourDeuxDonnants.class
+fr\uga\m1miage\pc\strategies\StrategiePacificateurNaifTest.class
+fr\uga\m1miage\pc\strategies\StrategieRancunierDouxTest.class
+fr\uga\m1miage\pc\strategies\StrategieDonnantDonnantAleatoireTest.class
+fr\uga\m1miage\pc\strategies\StrategieRancunierTest.class
+fr\uga\m1miage\pc\strategies\StrategieToujoursCoopererTest.class
+fr\uga\m1miage\pc\strategies\StrategieAdaptativeTest.class
+fr\uga\m1miage\pc\strategies\StrategieToujoursTricherTest.class
+fr\uga\m1miage\pc\strategies\StrategieAleatoireTest.class
+fr\uga\m1miage\pc\strategies\StrategieDonnantDonnantTest.class
+fr\uga\m1miage\pc\strategies\StrategieGraduelAleatoireTest.class
+fr\uga\m1miage\pc\strategies\StrategiePacificateurAleatoireTest.class
+fr\uga\m1miage\pc\model\JoueurTest.class
+fr\uga\m1miage\pc\strategies\StrategieVraiPacificateurTest.class
