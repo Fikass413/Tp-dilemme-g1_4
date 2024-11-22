@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FactorieStrategie.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">prisonners_dilemma_1_4</a> &gt; <a href="index.source.html" class="el_package">fr.uga.m1miage.pc.strategies</a> &gt; <span class="el_source">FactorieStrategie.java</span></div><h1>FactorieStrategie.java</h1><pre class="source lang-java linenums">package fr.uga.m1miage.pc.strategies;
+
+public class FactorieStrategie {
+	
+	private FactorieStrategie() {}
+	
+    public static Strategie creerStrategies(CategorieStrategie categorie) {
+<span class="fc bfc" id="L8" title="All 2 branches covered.">    	if (categorie == null)</span>
+<span class="fc" id="L9">    		throw new IllegalArgumentException(&quot;Mauvaise categorie de strategie : &quot; + categorie);</span>
+    	
+<span class="pc bpc" id="L11" title="1 of 19 branches missed.">        switch (categorie) {</span>
+            case DONNANT_DONNANT:
+<span class="fc" id="L13">                return new StrategieDonnantDonnant();</span>
+            case DONNANT_DONNANT_ALEATOIRE:
+<span class="fc" id="L15">                return new StrategieDonnantDonnantAleatoire();</span>
+            case DONNANT_DEUX_DONNANT_ALEATOIRE:
+<span class="fc" id="L17">                return new StrategieDonnantPourDeuxDonnantAleatoire();</span>
+            case DONNANT_DEUX_DONNANT:
+<span class="fc" id="L19">                return new StrategieDonnantPourDeuxDonnant();</span>
+            case SONDEUR_NAIF:
+<span class="fc" id="L21">                return new StrategieSondeurNaif();</span>
+            case SONDEUR_REPENTANT:
+<span class="fc" id="L23">                return new StrategieSondeurRepentant();</span>
+            case PACIFICATEUR_NAIF:
+<span class="fc" id="L25">                return new StrategiePacificateurNaif();</span>
+            case VRAI_PACIFICATEUR:
+<span class="fc" id="L27">                return new StrategieVraiPacificateur();</span>
+            case ALEATOIRE:
+<span class="fc" id="L29">                return new StrategieAleatoire();</span>
+            case TOUJOURS_TRAHIR:
+<span class="fc" id="L31">                return new StrategieToujoursTricher();</span>
+            case TOUJOURS_COOPERER:
+<span class="fc" id="L33">                return new StrategieToujoursCooperer();</span>
+            case RANCUNIER:
+<span class="fc" id="L35">                return new StrategieRancunier();</span>
+            case PAVLOV:
+<span class="fc" id="L37">                return new StrategiePavlov();</span>
+            case PAVLOV_ALEATOIRE:
+<span class="fc" id="L39">                return new StrategiePavlovAleatoire();</span>
+            case ADAPTATIF:
+<span class="fc" id="L41">                return new StrategieAdaptative();</span>
+            case GRADUEL:
+<span class="fc" id="L43">                return new StrategieGraduelAleatoire();</span>
+            case DONNANT_DONNANT_SOUPCONNEUX:
+<span class="fc" id="L45">                return new StrategieDonnantDonnantSoupconneux();</span>
+            case RANCUNIER_DOUX:
+<span class="fc" id="L47">                return new StrategieRancunierDoux();</span>
+            default:
+<span class="nc" id="L49">                throw new IllegalArgumentException(&quot;Mauvaise categorie de strategie : &quot; + categorie);</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

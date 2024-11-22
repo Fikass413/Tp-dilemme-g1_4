@@ -12,31 +12,13 @@ import java.util.Map;
  */
 public class PartieService {
 
-    private final Map<String, Strategie> strategies;
-
     /**
      * Initialise les stratégies disponibles.
      */
     public PartieService() {
-        strategies = new HashMap<>();
-        strategies.put("DonnantDonnant", new StrategieDonnantDonnant());
-        /*strategies.put("ToujoursCooperer", new StrategieToujoursCooperer());
-        strategies.put("ToujoursTricher", new StrategieToujoursTricher());
-        strategies.put("Graduel", new StrategieGraduel());
-        strategies.put("Aleatoire", new StrategieAleatoire());
-        strategies.put("Rancunier", new StrategieRancunier());
-        strategies.put("Pavlov", new StrategiePavlov());
-        strategies.put("Adaptative", new StrategieAdaptative());*/
+        
     }
 
-    /**
-     * Crée une nouvelle partie avec les deux joueurs.
-     *
-     * @param joueur1       Le premier joueur.
-     * @param joueur2       Le second joueur.
-     * @param toursRestants Le nombre de tours de la partie.
-     * @return Une partie initialisée.
-     */
     public Partie creerPartie(Joueur joueur1, Joueur joueur2, int toursRestants) {
         if (toursRestants < 0) {
             throw new IllegalArgumentException("Le nombre de tours ne peut pas être négatif.");
@@ -57,16 +39,16 @@ public class PartieService {
         Joueur joueur1 = partie.getJoueur1();
         Joueur joueur2 = partie.getJoueur2();
 
-        Strategie strategie1 = strategies.get(joueur1.getStrategie());
-        Strategie strategie2 = strategies.get(joueur2.getStrategie());
+        Strategie strategie1 = FactorieStrategie.creerStrategies(CategorieStrategie.fromString(joueur1.getStrategie()));
+        Strategie strategie2 = FactorieStrategie.creerStrategies(CategorieStrategie.fromString(joueur2.getStrategie()));
 
         if (strategie1 == null || strategie2 == null) {
-            throw new NullPointerException("Une ou plusieurs stratégies sont invalides.");
+            throw new RuntimeException("Une ou plusieurs stratégies sont invalides.");
         }
 
         // Calcul des coups des joueurs
-        char choix1 = strategie1.decider(joueur2.getDernierCoup());
-        char choix2 = strategie2.decider(joueur1.getDernierCoup());
+        char choix1 = strategie1.decider(joueur1.getDernierCoup());
+        char choix2 = strategie2.decider(joueur2.getDernierCoup());
 
         // Mise à jour des scores
         calculerScores(joueur1, choix1, joueur2, choix2);
@@ -98,7 +80,7 @@ public class PartieService {
         } else if (choix1 == 't' && choix2 == 'c') {
             joueur1.setScore(joueur1.getScore() + T);
             joueur2.setScore(joueur2.getScore() + D);
-        } else {
+        } else if (choix1 == 'c' && choix2 == 't'){
             joueur1.setScore(joueur1.getScore() + D);
             joueur2.setScore(joueur2.getScore() + T);
         }

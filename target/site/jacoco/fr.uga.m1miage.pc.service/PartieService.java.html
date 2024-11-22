@@ -12,36 +12,18 @@ import java.util.Map;
  */
 public class PartieService {
 
-    private final Map&lt;String, Strategie&gt; strategies;
-
     /**
      * Initialise les stratégies disponibles.
      */
-<span class="nc" id="L20">    public PartieService() {</span>
-<span class="nc" id="L21">        strategies = new HashMap&lt;&gt;();</span>
-<span class="nc" id="L22">        strategies.put(&quot;DonnantDonnant&quot;, new StrategieDonnantDonnant());</span>
-        /*strategies.put(&quot;ToujoursCooperer&quot;, new StrategieToujoursCooperer());
-        strategies.put(&quot;ToujoursTricher&quot;, new StrategieToujoursTricher());
-        strategies.put(&quot;Graduel&quot;, new StrategieGraduel());
-        strategies.put(&quot;Aleatoire&quot;, new StrategieAleatoire());
-        strategies.put(&quot;Rancunier&quot;, new StrategieRancunier());
-        strategies.put(&quot;Pavlov&quot;, new StrategiePavlov());
-        strategies.put(&quot;Adaptative&quot;, new StrategieAdaptative());*/
-<span class="nc" id="L30">    }</span>
+<span class="fc" id="L18">    public PartieService() {</span>
+        
+<span class="fc" id="L20">    }</span>
 
-    /**
-     * Crée une nouvelle partie avec les deux joueurs.
-     *
-     * @param joueur1       Le premier joueur.
-     * @param joueur2       Le second joueur.
-     * @param toursRestants Le nombre de tours de la partie.
-     * @return Une partie initialisée.
-     */
     public Partie creerPartie(Joueur joueur1, Joueur joueur2, int toursRestants) {
-<span class="nc bnc" id="L41" title="All 2 branches missed.">        if (toursRestants &lt; 0) {</span>
-<span class="nc" id="L42">            throw new IllegalArgumentException(&quot;Le nombre de tours ne peut pas être négatif.&quot;);</span>
+<span class="fc bfc" id="L23" title="All 2 branches covered.">        if (toursRestants &lt; 0) {</span>
+<span class="fc" id="L24">            throw new IllegalArgumentException(&quot;Le nombre de tours ne peut pas être négatif.&quot;);</span>
         }
-<span class="nc" id="L44">        return new Partie(joueur1, joueur2, toursRestants);</span>
+<span class="fc" id="L26">        return new Partie(joueur1, joueur2, toursRestants);</span>
     }
 
     /**
@@ -50,30 +32,30 @@ public class PartieService {
      * @param partie La partie en cours.
      */
     public void jouerTour(Partie partie) {
-<span class="nc bnc" id="L53" title="All 2 branches missed.">        if (partie.getToursRestants() &lt;= 0) {</span>
-<span class="nc" id="L54">            throw new IllegalStateException(&quot;La partie est terminée.&quot;);</span>
+<span class="fc bfc" id="L35" title="All 2 branches covered.">        if (partie.getToursRestants() &lt;= 0) {</span>
+<span class="fc" id="L36">            throw new IllegalStateException(&quot;La partie est terminée.&quot;);</span>
         }
 
-<span class="nc" id="L57">        Joueur joueur1 = partie.getJoueur1();</span>
-<span class="nc" id="L58">        Joueur joueur2 = partie.getJoueur2();</span>
+<span class="fc" id="L39">        Joueur joueur1 = partie.getJoueur1();</span>
+<span class="fc" id="L40">        Joueur joueur2 = partie.getJoueur2();</span>
 
-<span class="nc" id="L60">        Strategie strategie1 = strategies.get(joueur1.getStrategie());</span>
-<span class="nc" id="L61">        Strategie strategie2 = strategies.get(joueur2.getStrategie());</span>
+<span class="fc" id="L42">        Strategie strategie1 = FactorieStrategie.creerStrategies(CategorieStrategie.fromString(joueur1.getStrategie()));</span>
+<span class="fc" id="L43">        Strategie strategie2 = FactorieStrategie.creerStrategies(CategorieStrategie.fromString(joueur2.getStrategie()));</span>
 
-<span class="nc bnc" id="L63" title="All 4 branches missed.">        if (strategie1 == null || strategie2 == null) {</span>
-<span class="nc" id="L64">            throw new NullPointerException(&quot;Une ou plusieurs stratégies sont invalides.&quot;);</span>
+<span class="pc bpc" id="L45" title="2 of 4 branches missed.">        if (strategie1 == null || strategie2 == null) {</span>
+<span class="nc" id="L46">            throw new RuntimeException(&quot;Une ou plusieurs stratégies sont invalides.&quot;);</span>
         }
 
         // Calcul des coups des joueurs
-<span class="nc" id="L68">        char choix1 = strategie1.decider(joueur2.getDernierCoup());</span>
-<span class="nc" id="L69">        char choix2 = strategie2.decider(joueur1.getDernierCoup());</span>
+<span class="fc" id="L50">        char choix1 = strategie1.decider(joueur1.getDernierCoup());</span>
+<span class="fc" id="L51">        char choix2 = strategie2.decider(joueur2.getDernierCoup());</span>
 
         // Mise à jour des scores
-<span class="nc" id="L72">        calculerScores(joueur1, choix1, joueur2, choix2);</span>
+<span class="fc" id="L54">        calculerScores(joueur1, choix1, joueur2, choix2);</span>
 
         // Réduction du nombre de tours restants
-<span class="nc" id="L75">        partie.setToursRestants(partie.getToursRestants() - 1);</span>
-<span class="nc" id="L76">    }</span>
+<span class="fc" id="L57">        partie.setToursRestants(partie.getToursRestants() - 1);</span>
+<span class="fc" id="L58">    }</span>
 
     /**
      * Calcule les scores pour un tour en fonction des choix des joueurs.
@@ -84,28 +66,28 @@ public class PartieService {
      * @param choix2  Le choix du second joueur ('c' ou 't').
      */
     private void calculerScores(Joueur joueur1, char choix1, Joueur joueur2, char choix2) {
-<span class="nc" id="L87">        final int T = 5; // Trahir contre un coopérant</span>
-<span class="nc" id="L88">        final int C = 3; // Coopération mutuelle</span>
-<span class="nc" id="L89">        final int P = 1; // Trahison mutuelle</span>
-<span class="nc" id="L90">        final int D = 0; // Coopérer contre un traître</span>
+<span class="fc" id="L69">        final int T = 5; // Trahir contre un coopérant</span>
+<span class="fc" id="L70">        final int C = 3; // Coopération mutuelle</span>
+<span class="fc" id="L71">        final int P = 1; // Trahison mutuelle</span>
+<span class="fc" id="L72">        final int D = 0; // Coopérer contre un traître</span>
 
-<span class="nc bnc" id="L92" title="All 4 branches missed.">        if (choix1 == 't' &amp;&amp; choix2 == 't') {</span>
-<span class="nc" id="L93">            joueur1.setScore(joueur1.getScore() + P);</span>
-<span class="nc" id="L94">            joueur2.setScore(joueur2.getScore() + P);</span>
-<span class="nc bnc" id="L95" title="All 4 branches missed.">        } else if (choix1 == 'c' &amp;&amp; choix2 == 'c') {</span>
-<span class="nc" id="L96">            joueur1.setScore(joueur1.getScore() + C);</span>
-<span class="nc" id="L97">            joueur2.setScore(joueur2.getScore() + C);</span>
-<span class="nc bnc" id="L98" title="All 4 branches missed.">        } else if (choix1 == 't' &amp;&amp; choix2 == 'c') {</span>
-<span class="nc" id="L99">            joueur1.setScore(joueur1.getScore() + T);</span>
-<span class="nc" id="L100">            joueur2.setScore(joueur2.getScore() + D);</span>
-        } else {
-<span class="nc" id="L102">            joueur1.setScore(joueur1.getScore() + D);</span>
-<span class="nc" id="L103">            joueur2.setScore(joueur2.getScore() + T);</span>
+<span class="fc bfc" id="L74" title="All 4 branches covered.">        if (choix1 == 't' &amp;&amp; choix2 == 't') {</span>
+<span class="fc" id="L75">            joueur1.setScore(joueur1.getScore() + P);</span>
+<span class="fc" id="L76">            joueur2.setScore(joueur2.getScore() + P);</span>
+<span class="fc bfc" id="L77" title="All 4 branches covered.">        } else if (choix1 == 'c' &amp;&amp; choix2 == 'c') {</span>
+<span class="fc" id="L78">            joueur1.setScore(joueur1.getScore() + C);</span>
+<span class="fc" id="L79">            joueur2.setScore(joueur2.getScore() + C);</span>
+<span class="pc bpc" id="L80" title="1 of 4 branches missed.">        } else if (choix1 == 't' &amp;&amp; choix2 == 'c') {</span>
+<span class="fc" id="L81">            joueur1.setScore(joueur1.getScore() + T);</span>
+<span class="fc" id="L82">            joueur2.setScore(joueur2.getScore() + D);</span>
+<span class="pc bpc" id="L83" title="2 of 4 branches missed.">        } else if (choix1 == 'c' &amp;&amp; choix2 == 't'){</span>
+<span class="fc" id="L84">            joueur1.setScore(joueur1.getScore() + D);</span>
+<span class="fc" id="L85">            joueur2.setScore(joueur2.getScore() + T);</span>
         }
 
         // Mise à jour des derniers coups
-<span class="nc" id="L107">        joueur1.setDernierCoup(choix1);</span>
-<span class="nc" id="L108">        joueur2.setDernierCoup(choix2);</span>
-<span class="nc" id="L109">    }</span>
+<span class="fc" id="L89">        joueur1.setDernierCoup(choix1);</span>
+<span class="fc" id="L90">        joueur2.setDernierCoup(choix2);</span>
+<span class="fc" id="L91">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

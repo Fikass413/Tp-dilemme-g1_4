@@ -1,28 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StrategieGraduelAleatoire.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">prisonners_dilemma_1_4</a> &gt; <a href="index.source.html" class="el_package">fr.uga.m1miage.pc.strategies</a> &gt; <span class="el_source">StrategieGraduelAleatoire.java</span></div><h1>StrategieGraduelAleatoire.java</h1><pre class="source lang-java linenums">package fr.uga.m1miage.pc.strategies;
+import java.security.SecureRandom;
 
-<span class="fc" id="L3">public class StrategieGraduelAleatoire {</span>
-<span class="fc" id="L4">    private boolean punitionActive = false;  // Variable d'état pour suivre si la punition est active</span>
+<span class="fc" id="L4">public class StrategieGraduelAleatoire implements Strategie{</span>
+<span class="fc" id="L5">    private boolean punitionActive = false;  // Variable d'état pour suivre si la punition est active</span>
+<span class="fc" id="L6">    private static final SecureRandom secureRandom = new SecureRandom();</span>
 
     public char decider(char dernierChoixAdversaire) {
-<span class="fc bfc" id="L7" title="All 2 branches covered.">        if (dernierChoixAdversaire == 't') {</span>
-<span class="fc" id="L8">            punitionActive = true;  // Démarrer la punition après une trahison</span>
+<span class="fc bfc" id="L9" title="All 2 branches covered.">        if (dernierChoixAdversaire == 't') {</span>
+<span class="fc" id="L10">            punitionActive = true;  // Démarrer la punition après une trahison</span>
         }
 
-<span class="fc bfc" id="L11" title="All 2 branches covered.">        if (punitionActive) {</span>
-<span class="fc" id="L12">            return 't';  // Continuer à punir tant que la phase de punition est active</span>
+<span class="fc bfc" id="L13" title="All 2 branches covered.">        if (punitionActive) {</span>
+<span class="fc" id="L14">            return 't';  // Continuer à punir tant que la phase de punition est active</span>
         }
 
-<span class="pc bpc" id="L15" title="1 of 2 branches missed.">        if (dernierChoixAdversaire == 'c') {</span>
+<span class="pc bpc" id="L17" title="1 of 2 branches missed.">        if (dernierChoixAdversaire == 'c') {</span>
             // Logique pour choisir aléatoirement entre coopération et punition
-<span class="pc bpc" id="L17" title="1 of 2 branches missed.">            return Math.random() &gt; 0.5 ? 'c' : 't';</span>
+<span class="pc bpc" id="L19" title="1 of 2 branches missed.">        	return secureRandom.nextBoolean() ? 'c' : 't';</span>
         }
 
-<span class="nc" id="L20">        return 'c';  // Par défaut, choisir la coopération si pas de punition active</span>
+<span class="nc" id="L22">        return 'c';  // Par défaut, choisir la coopération si pas de punition active</span>
     }
 
     // Réinitialiser la punition après un certain nombre de tours ou une autre condition
     public void resetPunition() {
-<span class="nc" id="L25">        punitionActive = false;</span>
-<span class="nc" id="L26">    }</span>
+<span class="nc" id="L27">        punitionActive = false;</span>
+<span class="nc" id="L28">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
